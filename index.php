@@ -8,7 +8,7 @@ require_once WEBROOT . '/vendor/autoload.php';
 
 $right = add0(mt_rand(0, 9999), 4);
 
-echo getDT(1), '<br/>';
+echo 'Line:11 ', getDT(1), '<br/>';
 //echo Hello\SayHello::world();
 
 /* 启用 爬虫文件缓存 */
@@ -31,24 +31,24 @@ $_ql_header1 = getHeader($cfg_target_domain1);
 $_ql_header2 = getHeader($cfg_target_domain2);
 
 $phone = '1311234';
-echo "{$phone}<br>";
+echo "Line:34 {$phone}<br>";
 
 
 
 /* 百度 */
 try{
     $data_list = $_ql->get("http://{$cfg_target_domain1}/s", ['ie' => 'utf-8', 'wd' => "{$phone}{$right}"], $_ql_header1);
-    print_r($_ql->disguise_headers);echo '<br>';
+    echo 'Line:41 ';print_r($_ql->disguise_headers);echo '<br>';
     if ($data_list->find('title')->text() == '百度安全验证') {
         exit('触发了百度安全验证');
     }
     $dataResult = $data_list->find('.c-span20.c-span-last>div:eq(0)')->text();
-    var_dump($dataResult);echo '<br>';
+    echo 'Line:46 ';var_dump($dataResult);echo '<br>';
     if (!$dataResult) $dataResult = $data_list->find('.c-font-medium.c-color .c-line-clamp1 span')->text();
-    var_dump($dataResult);echo '<br>';
+    echo 'Line:48 ';var_dump($dataResult);echo '<br>';
     //print_r($_ql->getHtml());
 } catch(Exception $e){
-    print_r($e);
+    echo 'Line:51 ';print_r($e);
 }
 
 
@@ -56,11 +56,11 @@ try{
 /* 查号吧 */
 try{
     $data_list = $_ql->get("https://{$cfg_target_domain2}/{$phone}", [], $_ql_header2);
-    print_r($_ql->disguise_headers);echo '<br>';
+    echo 'Line:59 ';print_r($_ql->disguise_headers);echo '<br>';
     $dataResult = $data_list->find('#mw-content-text>.right:eq(0)>ul:eq(0)>li:eq(1)>a')->text();
-    var_dump($dataResult);echo '<br>';
+    echo 'Line:61 ';var_dump($dataResult);echo '<br>';
 } catch(Exception $e){
-    print_r($e);
+    echo 'Line:63 ';print_r($e);
 }
 
 
