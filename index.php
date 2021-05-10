@@ -36,24 +36,32 @@ echo "{$phone}<br>";
 
 
 /* 百度 */
-$data_list = $_ql->get("http://{$cfg_target_domain}/s", ['ie' => 'utf-8', 'wd' => "{$phone}{$right}"], $_ql_header1);
-print_r($_ql->disguise_headers);echo '<br>';
-if ($data_list->find('title')->text() == '百度安全验证') {
-    exit('触发了百度安全验证');
+try{
+    $data_list = $_ql->get("http://{$cfg_target_domain}/s", ['ie' => 'utf-8', 'wd' => "{$phone}{$right}"], $_ql_header1);
+    print_r($_ql->disguise_headers);echo '<br>';
+    if ($data_list->find('title')->text() == '百度安全验证') {
+        exit('触发了百度安全验证');
+    }
+    $dataResult = $data_list->find('.c-span20.c-span-last>div:eq(0)')->text();
+    var_dump($dataResult);echo '<br>';
+    if (!$dataResult) $dataResult = $data_list->find('.c-font-medium.c-color .c-line-clamp1 span')->text();
+    var_dump($dataResult);echo '<br>';
+    //print_r($_ql->getHtml());
+} catch(e){
+    print_r(e);
 }
-$dataResult = $data_list->find('.c-span20.c-span-last>div:eq(0)')->text();
-var_dump($dataResult);echo '<br>';
-if (!$dataResult) $dataResult = $data_list->find('.c-font-medium.c-color .c-line-clamp1 span')->text();
-var_dump($dataResult);echo '<br>';
-//print_r($_ql->getHtml());
 
 
 
 /* 查号吧 */
-$data_list = $_ql->get("https://cn.m.chahaoba.com/{$phone}", [], $_ql_header2);
-print_r($_ql->disguise_headers);echo '<br>';
-$dataResult = $data_list->find('#mw-content-text>.right:eq(0)>ul:eq(0)>li:eq(1)>a')->text();
-var_dump($dataResult);echo '<br>';
+try{
+    $data_list = $_ql->get("https://cn.m.chahaoba.com/{$phone}", [], $_ql_header2);
+    print_r($_ql->disguise_headers);echo '<br>';
+    $dataResult = $data_list->find('#mw-content-text>.right:eq(0)>ul:eq(0)>li:eq(1)>a')->text();
+    var_dump($dataResult);echo '<br>';
+} catch(e){
+    print_r(e);
+}
 
 
 
