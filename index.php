@@ -47,8 +47,8 @@ try{
     if (!$dataResult) $dataResult = $data_list->find('.c-font-medium.c-color .c-line-clamp1 span')->text();
     var_dump($dataResult);echo '<br>';
     //print_r($_ql->getHtml());
-} catch(e){
-    print_r(e);
+} catch(Exception $e){
+    print_r($e);
 }
 
 
@@ -59,8 +59,8 @@ try{
     print_r($_ql->disguise_headers);echo '<br>';
     $dataResult = $data_list->find('#mw-content-text>.right:eq(0)>ul:eq(0)>li:eq(1)>a')->text();
     var_dump($dataResult);echo '<br>';
-} catch(e){
-    print_r(e);
+} catch(Exception $e){
+    print_r($e);
 }
 
 
