@@ -36,7 +36,7 @@ echo "Line:34 {$phone}<br>";
 
 
 /* 百度 */
-try{
+//try{
     $data_list = $_ql->get("http://{$cfg_target_domain1}/s", ['ie' => 'utf-8', 'wd' => "{$phone}{$right}"], $_ql_header1);
     echo 'Line:41 ';print_r($_ql->disguise_headers);echo '<br>';
     if ($data_list->find('title')->text() == '百度安全验证') {
@@ -47,21 +47,21 @@ try{
     if (!$dataResult) $dataResult = $data_list->find('.c-font-medium.c-color .c-line-clamp1 span')->text();
     echo 'Line:48 ';var_dump($dataResult);echo '<br>';
     //print_r($_ql->getHtml());
-} catch(Exception $e){
+//} catch(Exception $e){
     echo 'Line:51 ';print_r($e);
-}
+//}
 
 
 
 /* 查号吧 */
-try{
+//try{
     $data_list = $_ql->get("https://{$cfg_target_domain2}/{$phone}", [], $_ql_header2);
     echo 'Line:59 ';print_r($_ql->disguise_headers);echo '<br>';
     $dataResult = $data_list->find('#mw-content-text>.right:eq(0)>ul:eq(0)>li:eq(1)>a')->text();
     echo 'Line:61 ';var_dump($dataResult);echo '<br>';
-} catch(Exception $e){
+//} catch(Exception $e){
     echo 'Line:63 ';print_r($e);
-}
+//}
 
 
 
