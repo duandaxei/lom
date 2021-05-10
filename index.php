@@ -16,7 +16,7 @@ $cfg_cache_enable = 1;
 /* 爬虫文件缓存路径 */
 $cfg_cache_path = WEBROOT . '/_temp/';
 /* 爬虫目标网址 */
-$cfg_target_domain = 'www.baidu.com';
+$cfg_target_domain1 = 'www.baidu.com';
 $cfg_target_domain2 = 'cn.m.chahaoba.com';
 
 use QL\QueryList;
@@ -76,7 +76,7 @@ function getHeader($h){
         'headers' => [
             //'Cookie' => 'abc=111;xxx=222',
             'Host' => $h,
-            'Referer' => "http://{$h}/",
+            'Referer' => "http".($h=='cn.m.chahaoba.com'?'s':'')."://{$h}/",
             'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
             'Accept-Encoding' => 'gzip, deflate, br',
             'Accept-Language' => 'en-US,en;q=0.9,zh-CN,zh;q=0.8;q=0.7',
