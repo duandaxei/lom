@@ -55,7 +55,7 @@ try{
 
 /* 查号吧 */
 try{
-    $data_list = $_ql->get("https://cn.m.chahaoba.com/{$phone}", [], $_ql_header2);
+    $data_list = $_ql->get("https://{$cfg_target_domain2}/{$phone}", [], $_ql_header2);
     print_r($_ql->disguise_headers);echo '<br>';
     $dataResult = $data_list->find('#mw-content-text>.right:eq(0)>ul:eq(0)>li:eq(1)>a')->text();
     var_dump($dataResult);echo '<br>';
