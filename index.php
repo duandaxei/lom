@@ -48,7 +48,7 @@ echo "Line:34 {$phone}<br>";
     echo 'Line:48 ';var_dump($dataResult);echo '<br>';
     //print_r($_ql->getHtml());
 //} catch(Exception $e){
-    echo 'Line:51 ';print_r($e);
+    //echo 'Line:51 ';print_r($e);
 //}
 
 
@@ -60,7 +60,7 @@ echo "Line:34 {$phone}<br>";
     $dataResult = $data_list->find('#mw-content-text>.right:eq(0)>ul:eq(0)>li:eq(1)>a')->text();
     echo 'Line:61 ';var_dump($dataResult);echo '<br>';
 //} catch(Exception $e){
-    echo 'Line:63 ';print_r($e);
+    //echo 'Line:63 ';print_r($e);
 //}
 
 
