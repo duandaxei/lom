@@ -37,7 +37,7 @@ echo "{$phone}<br>";
 
 /* 百度 */
 try{
-    $data_list = $_ql->get("http://{$cfg_target_domain}/s", ['ie' => 'utf-8', 'wd' => "{$phone}{$right}"], $_ql_header1);
+    $data_list = $_ql->get("http://{$cfg_target_domain1}/s", ['ie' => 'utf-8', 'wd' => "{$phone}{$right}"], $_ql_header1);
     print_r($_ql->disguise_headers);echo '<br>';
     if ($data_list->find('title')->text() == '百度安全验证') {
         exit('触发了百度安全验证');
