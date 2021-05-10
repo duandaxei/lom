@@ -1,0 +1,4 @@
+vendor/*
+composer.lock
+_temp/*
+testme.php

@@ -1,0 +1,22 @@
+{
+    "name": "daxei/lom",
+    "description": "lom",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daxei",
+            "email": "tdaxei8@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "jaeger/querylist": "^4.2",
+        "mountainguan/ql-plugin-disguise": "^4.1",
+        "jaeger/querylist-absolute-url": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hello\\": "src/"
+        }
+    }
+}
