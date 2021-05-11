@@ -29,26 +29,29 @@ $_ql->use([
 ]);
 $_ql_header1 = getHeader($cfg_target_domain1);
 $_ql_header2 = getHeader($cfg_target_domain2);
+$_ql_header2['verify'] = 0;
+echo 'Line:33 ';print_r($_ql_header1);
+echo 'Line:34 ';print_r($_ql_header2);
 
 $phone = '1311234';
-echo "Line:34 {$phone}<br>";
+echo "Line:37 {$phone}<br>";
 
 
 
 /* 百度 */
 //try{
     $data_list = $_ql->get("http://{$cfg_target_domain1}/s", ['ie' => 'utf-8', 'wd' => "{$phone}{$right}"], $_ql_header1);
-    echo 'Line:41 ';print_r($_ql->disguise_headers);echo '<br>';
+    echo 'Line:44 ';print_r($_ql->disguise_headers);echo '<br>';
     if ($data_list->find('title')->text() == '百度安全验证') {
         exit('触发了百度安全验证');
     }
     $dataResult = $data_list->find('.c-span20.c-span-last>div:eq(0)')->text();
-    echo 'Line:46 ';var_dump($dataResult);echo '<br>';
+    echo 'Line:49 ';var_dump($dataResult);echo '<br>';
     if (!$dataResult) $dataResult = $data_list->find('.c-font-medium.c-color .c-line-clamp1 span')->text();
-    echo 'Line:48 ';var_dump($dataResult);echo '<br>';
+    echo 'Line:51 ';var_dump($dataResult);echo '<br>';
     //print_r($_ql->getHtml());
 //} catch(Exception $e){
-    //echo 'Line:51 ';print_r($e);
+    //echo 'Line:54 ';print_r($e);
 //}
 
 
@@ -56,11 +59,11 @@ echo "Line:34 {$phone}<br>";
 /* 查号吧 */
 //try{
     $data_list = $_ql->get("https://{$cfg_target_domain2}/{$phone}", [], $_ql_header2);
-    echo 'Line:59 ';print_r($_ql->disguise_headers);echo '<br>';
+    echo 'Line:62 ';print_r($_ql->disguise_headers);echo '<br>';
     $dataResult = $data_list->find('#mw-content-text>.right:eq(0)>ul:eq(0)>li:eq(1)>a')->text();
-    echo 'Line:61 ';var_dump($dataResult);echo '<br>';
+    echo 'Line:64 ';var_dump($dataResult);echo '<br>';
 //} catch(Exception $e){
-    //echo 'Line:63 ';print_r($e);
+    //echo 'Line:66 ';print_r($e);
 //}
 
 
