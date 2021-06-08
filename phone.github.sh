@@ -6,7 +6,7 @@ htmlDir="${rootDir}/py_html"
 logFile="${logsDir}/phone.$(date -d today +'%Y-%m-%d').log"
 [[ ! -d "${logsDir}" ]] && (mkdir "${logsDir}")
 [[ ! -d "${htmlDir}" ]] && (mkdir "${htmlDir}")
-if [[ ! type jq &>/dev/null ]]; then
+if ! type jq &>/dev/null; then
     sudo apt-get install jq
     #yum install jq
 fi
