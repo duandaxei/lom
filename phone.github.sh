@@ -6,6 +6,10 @@ htmlDir="${rootDir}/py_html"
 logFile="${logsDir}/phone.$(date -d today +'%Y-%m-%d').log"
 [[ ! -d "${logsDir}" ]] && (mkdir "${logsDir}")
 [[ ! -d "${htmlDir}" ]] && (mkdir "${htmlDir}")
+if ! type jq &>/dev/null; then
+    sudo apt-get install jq
+    #yum install jq
+fi
 
 gsd='-'
 #phone=1540000
@@ -141,10 +145,6 @@ if [[ ! -f "${htmlDir}/${phone}.get.html" ]]; then
     curl -s -o "${htmlDir}/${phone}.get.html" -k -G -d "op=getOne" -d "tel=${phone}" "https://a.cdskdxyy.com/TM/API.PHP"
     myEcho "GSD 等待 20 秒"
     sleep 20
-fi
-if ! type jq &>/dev/null; then
-    sudo apt-get install jq
-    #yum install jq
 fi
 json=$(cat "${htmlDir}/${phone}.get.html")
 status=$(echo ${json} | jq ".status")
