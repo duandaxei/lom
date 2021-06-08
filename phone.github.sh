@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 rootDir=$(dirname $(readlink -f "$0"))
 logsDir="${rootDir}/py_logs"
