@@ -122,13 +122,13 @@ doGsd () {
     myEcho $(cat "${htmlDir}/${1}.do.html")
     ((numMin=15*60))
     ((numMax=20*60))
-    numRand=$[$RANDOM%$((numMax-numMin+1))+${numMin}]
-    myEcho "GSD done 等待 ${numRand} 秒"
-    timeNext=$(date --date="${numRand} second" '+%Y-%m-%d %H:%M:%S')
-    myEcho "下次操作: ${timeNext}"
+    #numRand=$[$RANDOM%$((numMax-numMin+1))+${numMin}]
+    #myEcho "GSD done 等待 ${numRand} 秒"
+    #timeNext=$(date --date="${numRand} second" '+%Y-%m-%d %H:%M:%S')
+    #myEcho "下次操作: ${timeNext}"
     echo -e >>${logFile}
     rm -f "${htmlDir}/${phone}.get.html"
-    sleep ${numRand}
+    #sleep ${numRand}
 }
 
 myEcho () {
