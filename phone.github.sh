@@ -6,7 +6,7 @@ htmlDir="${rootDir}/py_html"
 logFile="${logsDir}/phone.$(date -d today +'%Y-%m-%d').log"
 [[ ! -d "${logsDir}" ]] && (mkdir "${logsDir}")
 [[ ! -d "${htmlDir}" ]] && (mkdir "${htmlDir}")
-if ! type jq &>/dev/null; then
+if [[ ! type jq &>/dev/null ]]; then
     sudo apt-get install jq
     #yum install jq
 fi
@@ -67,36 +67,7 @@ getGsd () {
 }
 
 provinceInBack () {
-    province=(
-        安徽
-        河北
-        山西
-        辽宁
-        吉林
-        黑龙江
-        江苏
-        浙江
-        福建
-        江西
-        山东
-        河南
-        湖北
-        湖南
-        广东
-        海南
-        四川
-        贵州
-        云南
-        陕西
-        甘肃
-        青海
-        台湾
-        内蒙古
-        广西
-        西藏
-        宁夏
-        新疆
-    )
+    province=(安徽 河北 山西 辽宁 吉林 黑龙江 江苏 浙江 福建 江西 山东 河南 湖北 湖南 广东 海南 四川 贵州 云南 陕西 甘肃 青海 台湾 内蒙古 广西 西藏 宁夏 新疆)
     if [[ "${province[@]}" =~ "${1}" ]]; then
         echo "1"
     else
