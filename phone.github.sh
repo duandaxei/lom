@@ -116,7 +116,7 @@ add0 () {
 }
 
 doGsd () {
-    curl -s -o "${htmlDir}/${1}.do.html" -k -G -d "op=insert" -d "val=%7B%22tel%22:%22${1}%22,%22gsd%22:%22${2}%22%7D" "https://gsd.cdskdxyy.com/TM/API.PHP"
+    curl -s -o "${htmlDir}/${1}.do.html" -k -G -d "op=insert" -d "val=%7B%22tel%22:%22${1}%22,%22gsd%22:%22${2}%22%7D" "https://a.cdskdxyy.com/TM/API.PHP"
     myEcho "GSD do 等待 20 秒"
     sleep 20
     myEcho $(cat "${htmlDir}/${1}.do.html")
@@ -146,7 +146,12 @@ echo ${mob_next} >${mob_file}
 phone=${mob_left}${mob_center}$(add0 "${mob_right}")
 myEcho "开始操作号码 【${phone}】"
 if [[ ! -f "${htmlDir}/${phone}.get.html" ]]; then
-    curl -s -o "${htmlDir}/${phone}.get.html" -k -G -d "op=getOne" -d "tel=${phone}" "https://gsd.cdskdxyy.com/TM/API.PHP"
+    curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36" \
+        -H "Referer: https://cn.m.chahaoba.com/%E9%A6%96%E9%A1%B5" \
+        -G -d "op=getOne" -d "tel=${phone}" \
+        -s -o "${htmlDir}/${phone}.get.html" -k \
+        "https://a.cdskdxyy.com/TM/API.PHP"
+    #curl -s -o "${htmlDir}/${phone}.get.html" -k -G -d "op=getOne" -d "tel=${phone}" "https://a.cdskdxyy.com/TM/API.PHP"
     myEcho "GSD 等待 20 秒"
     sleep 20
 fi
@@ -176,7 +181,7 @@ fi
 #    phone=${left}${center}$(add0 "${x}")
 #    myEcho "开始操作号码 【${phone}】"
 #    if [[ ! -f "${htmlDir}/${phone}.get.html" ]]; then
-#        curl -s -o "${htmlDir}/${phone}.get.html" -k -G -d "op=getOne" -d "tel=${phone}" "https://gsd.cdskdxyy.com/TM/API.PHP"
+#        curl -s -o "${htmlDir}/${phone}.get.html" -k -G -d "op=getOne" -d "tel=${phone}" "https://a.cdskdxyy.com/TM/API.PHP"
 #        myEcho "GSD 等待 20 秒"
 #        sleep 20
 #    fi
