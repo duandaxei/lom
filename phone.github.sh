@@ -120,13 +120,12 @@ doGsd () {
     myEcho "GSD do 等待 20 秒"
     sleep 20
     myEcho $(cat "${htmlDir}/${1}.do.html")
-    ((numMin=15*60))
-    ((numMax=20*60))
+    #((numMin=15*60))
+    #((numMax=20*60))
     #numRand=$[$RANDOM%$((numMax-numMin+1))+${numMin}]
     #myEcho "GSD done 等待 ${numRand} 秒"
     #timeNext=$(date --date="${numRand} second" '+%Y-%m-%d %H:%M:%S')
     #myEcho "下次操作: ${timeNext}"
-    echo -e >>${logFile}
     rm -f "${htmlDir}/${phone}.get.html"
     #sleep ${numRand}
 }
@@ -166,29 +165,5 @@ elif [[ ${status} = '"ok"' ]] && [[ ${msg} = '"-"' ]]; then
     myEcho "ok && -"
     getGsd "${phone}"
 fi
+echo -e >>${logFile}
 
-#left=15
-#center=8
-#start=0
-#end=10000
-#for ((x=${start}; x<${end}; x++)); do
-#    echo -e >>${logFile}
-#    phone=${left}${center}$(add0 "${x}")
-#    myEcho "开始操作号码 【${phone}】"
-#    if [[ ! -f "${htmlDir}/${phone}.get.html" ]]; then
-#        curl -s -o "${htmlDir}/${phone}.get.html" -k -G -d "op=getOne" -d "tel=${phone}" "https://a.cdskdxyy.com/TM/API.PHP"
-#        myEcho "GSD 等待 20 秒"
-#        sleep 20
-#    fi
-#    json=$(cat "${htmlDir}/${phone}.get.html")
-#    status=$(echo ${json} | jq ".status")
-#    msg=$(echo ${json} | jq ".msg")
-#    myEcho "查询号码 【${phone}】，返回信息 ${json}"
-#    if [[ ${status} = "\"bad\"" ]]; then
-#        myEcho "bad"
-#        getGsd "${phone}"
-#    elif [[ ${status} = "\"ok\"" ]] && [[ ${msg} = "\"-\"" ]]; then
-#        myEcho "ok && -"
-#        getGsd "${phone}"
-#    fi
-#done
