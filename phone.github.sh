@@ -2,17 +2,10 @@
 
 rootDir=$(dirname $(readlink -f "$0"))
 logsDir="${rootDir}/py_logs"
-logFile="${logsDir}/phone.$(date -d today +'%Y-%m-%d').log"
 htmlDir="${rootDir}/py_html"
-#if [[ ! -d "${logsDir}" ]]; then
-#    mkdir "${logsDir}"
-#fi
-#if [[ ! -d "${htmlDir}" ]]; then
-#    mkdir "${htmlDir}"
-#fi
+logFile="${logsDir}/phone.$(date -d today +'%Y-%m-%d').log"
 [[ ! -d "${logsDir}" ]] && (mkdir "${logsDir}")
 [[ ! -d "${htmlDir}" ]] && (mkdir "${htmlDir}")
-
 
 gsd='-'
 #phone=1540000
@@ -152,7 +145,6 @@ fi
 if ! type jq &>/dev/null; then
     sudo apt-get install jq
     #yum install jq
-    #apk --no-cache add -f jq
 fi
 json=$(cat "${htmlDir}/${phone}.get.html")
 status=$(echo ${json} | jq ".status")
