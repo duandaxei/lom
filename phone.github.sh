@@ -17,44 +17,78 @@ gsd='-'
 #phone=1311234
 #phone=1455267
 
+curlCHB () {
+    curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36" \
+        -H "Referer: https://cn.m.chahaoba.com/%E9%A6%96%E9%A1%B5" \
+        -s -o "${htmlDir}/${1}.html" -k \
+        "https://cn.m.chahaoba.com/${1}"
+    myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 20 秒"
+    sleep 20
+}
+
 getGsd () {
     if [[ ! -f "${htmlDir}/${1}.html" ]]; then
-        curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36" \
-            -H "Referer: https://cn.m.chahaoba.com/%E9%A6%96%E9%A1%B5" \
-            -s -o "${htmlDir}/${1}.html" -k \
-            "https://cn.m.chahaoba.com/${1}"
-        myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 20 秒"
-        sleep 20
+        curlCHB "${1}"
     fi
     test_0=$(cat ${htmlDir}/${1}.html)
     if [[ "${test_0}" ]]; then
         strFound=$(echo ${test_0} | grep "本站中目前没有找到${1}页面。")
+        str502=$(echo ${test_0} | grep "502 Bad Gateway")
+        str522=$(echo ${test_0} | grep "522 Origin Connection Time-out")
+        str524=$(echo ${test_0} | grep "524 Origin Time-out")
+        str525=$(echo ${test_0} | grep "525 Origin SSL Handshake Error")
         if [[ "${strFound}" ]]; then
             myEcho "未获取到号码【${1}】归属地，可能号码格式错误"
+            myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 60 秒"
+            sleep 60
         else
-            test_1=$(echo ${test_0} | sed -r 's/.*归属省份地区：(.*)<\/li> <li> 电信运营商：.*/\1/g')
-            if [[ "${test_1}" ]]; then
-                strF2=$(echo ${test_1} | grep "、")
-                if [[ "${strF2}" == "" ]]; then
-                    test_2=$(echo ${test_1} | sed -r 's/<a href=".*" class="extiw" title="link:.*">(.*)<\/a>/\1/g')
-                    gsd="${test_2}-${test_2}"
+            if [[ "${str502}" ]]; then
+                myEcho "未获取到号码【${1}】归属地，查号吧 502 错误"
+                myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 60 秒"
+                sleep 60
+            else
+                if [[ "${str522}" ]]; then
+                    myEcho "未获取到号码【${1}】归属地，查号吧 522 错误"
+                    myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 60 秒"
+                    sleep 60
                 else
-                    #arr=(`echo ${test_1} | tr ' ' '#' | tr '、' ' '`)
-                    res=()
-                    oldIFS=$IFS
-                    IFS=、
-                    arr=(${test_1})
-                    for ((i=0; i<${#arr[@]}; i++)); do
-                        res[i]=$(echo ${arr[$i]} | sed -r 's/<a href=".*" class="extiw" title="link:.*">(.*)<\/a>/\1/g')
-                    done
-                    IFS=$oldIFS
-                    gsd="${res[0]}-${res[1]}"
-                    if [[ "${res[1]}" != "重庆" ]]; then
-                        if [[ "${gsd}" != "青海-海南" ]] && [[ "${gsd}" != "吉林-吉林" ]] && [[ $(provinceInBack "${res[1]}") == "1" ]]; then
-                            gsd="${res[1]}-${res[0]}"
-                        fi
+                    if [[ "${str524}" ]]; then
+                        myEcho "未获取到号码【${1}】归属地，查号吧 524 错误"
+                        myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 60 秒"
+                        sleep 60
                     else
-                        gsd="${res[1]}-${res[0]}"
+                        if [[ "${str525}" ]]; then
+                            myEcho "未获取到号码【${1}】归属地，查号吧 525 错误"
+                            myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 60 秒"
+                            sleep 60
+                        else
+                            test_1=$(echo ${test_0} | sed -r 's/.*归属省份地区：(.*)<\/li> <li> 电信运营商：.*/\1/g')
+                            if [[ "${test_1}" ]]; then
+                                strF2=$(echo ${test_1} | grep "、")
+                                if [[ "${strF2}" == "" ]]; then
+                                    test_2=$(echo ${test_1} | sed -r 's/<a href=".*" class="extiw" title="link:.*">(.*)<\/a>/\1/g')
+                                    gsd="${test_2}-${test_2}"
+                                else
+                                    #arr=(`echo ${test_1} | tr ' ' '#' | tr '、' ' '`)
+                                    res=()
+                                    oldIFS=$IFS
+                                    IFS=、
+                                    arr=(${test_1})
+                                    for ((i=0; i<${#arr[@]}; i++)); do
+                                        res[i]=$(echo ${arr[$i]} | sed -r 's/<a href=".*" class="extiw" title="link:.*">(.*)<\/a>/\1/g')
+                                    done
+                                    IFS=$oldIFS
+                                    gsd="${res[0]}-${res[1]}"
+                                    if [[ "${res[1]}" != "重庆" ]]; then
+                                        if [[ "${gsd}" != "青海-海南" ]] && [[ "${gsd}" != "吉林-吉林" ]] && [[ $(provinceInBack "${res[1]}") == "1" ]]; then
+                                            gsd="${res[1]}-${res[0]}"
+                                        fi
+                                    else
+                                        gsd="${res[1]}-${res[0]}"
+                                    fi
+                                fi
+                            fi
+                        fi
                     fi
                 fi
             fi
