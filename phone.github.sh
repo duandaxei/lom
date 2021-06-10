@@ -129,4 +129,4 @@ elif [[ ${status} = '"ok"' ]] && [[ ${msg} = '"-"' ]]; then
     getGsd "${phone}"
 fi
 echo -e >>${logFile}
-
+echo 
