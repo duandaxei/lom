@@ -129,8 +129,9 @@ doGsd () {
 }
 
 myEcho () {
-    echo ${1}
-    echo $(date '+%Y-%m-%d %H:%M:%S') ${1} >>${logFile}
+    st="$(date '+%Y-%m-%d %H:%M:%S') ${1}"
+    echo "${st}"
+    echo "${st}" >>${logFile}
 }
 
 mob_file="./phone.txt"
