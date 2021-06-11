@@ -11,7 +11,7 @@ if ! type jq &>/dev/null; then
     #yum install jq
 fi
 
-gsd='-'
+gsd="-"
 #phone=1540000
 #phone=1560003
 #phone=1311234
@@ -104,7 +104,9 @@ getGsd () {
         myEcho "未获取到号码【${1}】源码"
     fi
     myEcho "获取到号码【${1}】的归属地为【${gsd}】"
-    doGsd "${1}" "${gsd}"
+    if [[ "${gsd}" != "-" ]]; then
+        doGsd "${1}" "${gsd}"
+    fi
 }
 
 provinceInBack () {
