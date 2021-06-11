@@ -123,9 +123,13 @@ doGsd () {
     strDone=$(cat "${htmlDir}/${1}.do.html")
     myEcho "${strDone}"
     if [[ -n "${strDone}" ]]; then
-        rm -f "${htmlDir}/${1}.get.html"
-        echo ${mob_next} >${mob_file}
+        doNext "${1}"
     fi
+}
+
+doNext () {
+    rm -f "${htmlDir}/${1}.get.html"
+    echo ${mob_next} >${mob_file}
 }
 
 myEcho () {
@@ -159,6 +163,8 @@ if [[ ${status} = '"bad"' ]]; then
 elif [[ ${status} = '"ok"' ]] && [[ ${msg} = '"-"' ]]; then
     myEcho "ok && -"
     getGsd "${phone}"
+else
+    doNext "${phone}"
 fi
 echo -e >>${logFile}
 echo 
