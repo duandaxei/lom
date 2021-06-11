@@ -133,7 +133,7 @@ doGsd () {
     strDone=$(cat "${htmlDir}/${1}.do.html")
     myEcho "${strDone}"
     if [[ -n "${strDone}" ]]; then
-        rm -f "${htmlDir}/${phone}.get.html"
+        rm -f "${htmlDir}/${1}.get.html"
         echo ${mob_next} >${mob_file}
     fi
 }
