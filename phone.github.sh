@@ -18,18 +18,18 @@ gsd="-"
 #phone=1455267
 
 curlCHB () {
-    curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36" \
-        -H "Referer: https://cn.m.chahaoba.com/%E9%A6%96%E9%A1%B5" \
-        -s -o "${htmlDir}/${1}.html" -k \
-        "https://cn.m.chahaoba.com/${1}"
-    myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 20 秒"
-    sleep 20
+    if [[ ! -f "${htmlDir}/${1}.html" ]]; then
+        curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36" \
+            -H "Referer: https://cn.m.chahaoba.com/%E9%A6%96%E9%A1%B5" \
+            -s -o "${htmlDir}/${1}.html" -k \
+            "https://cn.m.chahaoba.com/${1}"
+        myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 20 秒"
+        sleep 20
+    fi
 }
 
 getGsd () {
-    if [[ ! -f "${htmlDir}/${1}.html" ]]; then
-        curlCHB "${1}"
-    fi
+    curlCHB "${1}"
     test_0=$(cat "${htmlDir}/${1}.html")
     if [[ "${test_0}" ]]; then
         strFound=$(echo ${test_0} | grep "本站中目前没有找到${1}页面。")
