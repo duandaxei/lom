@@ -30,7 +30,7 @@ getGsd () {
     if [[ ! -f "${htmlDir}/${1}.html" ]]; then
         curlCHB "${1}"
     fi
-    test_0=$(cat ${htmlDir}/${1}.html)
+    test_0=$(cat "${htmlDir}/${1}.html")
     if [[ "${test_0}" ]]; then
         strFound=$(echo ${test_0} | grep "本站中目前没有找到${1}页面。")
         str400=$(echo ${test_0} | grep "400 Bad Request")
@@ -130,16 +130,12 @@ doGsd () {
     curl -s -o "${htmlDir}/${1}.do.html" -k -G -d "op=insert" -d "val=%7B%22tel%22:%22${1}%22,%22gsd%22:%22${2}%22%7D" "https://a.cdskdxyy.com/TM/API.PHP"
     myEcho "GSD do 等待 20 秒"
     sleep 20
-    myEcho $(cat "${htmlDir}/${1}.do.html")
-    #((numMin=15*60))
-    #((numMax=20*60))
-    #numRand=$[$RANDOM%$((numMax-numMin+1))+${numMin}]
-    #myEcho "GSD done 等待 ${numRand} 秒"
-    #timeNext=$(date --date="${numRand} second" '+%Y-%m-%d %H:%M:%S')
-    #myEcho "下次操作: ${timeNext}"
-    rm -f "${htmlDir}/${phone}.get.html"
-    echo ${mob_next} >${mob_file}
-    #sleep ${numRand}
+    strDone=$(cat "${htmlDir}/${1}.do.html")
+    myEcho "${strDone}"
+    if [[ -n "${strDone}" ]]; then
+        rm -f "${htmlDir}/${phone}.get.html"
+        echo ${mob_next} >${mob_file}
+    fi
 }
 
 myEcho () {
@@ -151,7 +147,7 @@ mob_file="./phone.txt"
 [[ ! -f ${mob_file} ]] && (echo 0 >${mob_file})
 mob_left=15
 mob_center=9
-mob_right=$(cat ${mob_file})
+mob_right=$(cat "${mob_file}")
 ((mob_next=${mob_right}+1))
 phone=${mob_left}${mob_center}$(add0 "${mob_right}")
 myEcho "开始操作号码 【${phone}】"
