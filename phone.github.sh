@@ -140,6 +140,8 @@ mob_left=15
 mob_center=9
 mob_right=$(cat "${mob_file}")
 ((mob_next=${mob_right}+1))
+echo -e >>${logFile}
+echo
 phone=${mob_left}${mob_center}$(add0 "${mob_right}")
 myEcho "开始操作号码 【${phone}】"
 if [[ ! -f "${htmlDir}/${phone}.get.html" ]]; then
