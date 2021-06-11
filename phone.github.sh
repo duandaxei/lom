@@ -122,7 +122,7 @@ doGsd () {
     sleep 20
     strDone=$(cat "${htmlDir}/${1}.do.html")
     myEcho "${strDone}"
-    if [[ -n "${strDone}" ]]; then
+    if [[ -z "${strDone}" ]]; then
         setNext "${1}"
     fi
 }
