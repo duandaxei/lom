@@ -138,6 +138,7 @@ doGsd () {
     #timeNext=$(date --date="${numRand} second" '+%Y-%m-%d %H:%M:%S')
     #myEcho "下次操作: ${timeNext}"
     rm -f "${htmlDir}/${phone}.get.html"
+    echo ${mob_next} >${mob_file}
     #sleep ${numRand}
 }
 
@@ -152,7 +153,6 @@ mob_left=15
 mob_center=9
 mob_right=$(cat ${mob_file})
 ((mob_next=${mob_right}+1))
-echo ${mob_next} >${mob_file}
 phone=${mob_left}${mob_center}$(add0 "${mob_right}")
 myEcho "开始操作号码 【${phone}】"
 if [[ ! -f "${htmlDir}/${phone}.get.html" ]]; then
