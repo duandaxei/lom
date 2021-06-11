@@ -123,11 +123,11 @@ doGsd () {
     strDone=$(cat "${htmlDir}/${1}.do.html")
     myEcho "${strDone}"
     if [[ -n "${strDone}" ]]; then
-        doNext "${1}"
+        setNext "${1}"
     fi
 }
 
-doNext () {
+setNext () {
     rm -f "${htmlDir}/${1}.get.html"
     echo ${mob_next} >${mob_file}
 }
@@ -164,7 +164,7 @@ elif [[ ${status} = '"ok"' ]] && [[ ${msg} = '"-"' ]]; then
     myEcho "ok && -"
     getGsd "${phone}"
 else
-    doNext "${phone}"
+    setNext "${phone}"
 fi
 echo -e >>${logFile}
 echo 
