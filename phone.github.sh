@@ -40,33 +40,21 @@ getGsd () {
         str525=$(echo ${test_0} | grep "525 Origin SSL Handshake Error")
         if [[ "${strFound}" ]]; then
             myEcho "未获取到号码【${1}】归属地，可能号码格式错误"
-            myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 10 秒"
-            sleep 10
         else
             if [[ "${str400}" ]]; then
                 myEcho "未获取到号码【${1}】归属地，查号吧 400 错误"
-                myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 10 秒"
-                sleep 10
             else
                 if [[ "${str502}" ]]; then
                     myEcho "未获取到号码【${1}】归属地，查号吧 502 错误"
-                    myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 10 秒"
-                    sleep 10
                 else
                     if [[ "${str522}" ]]; then
                         myEcho "未获取到号码【${1}】归属地，查号吧 522 错误"
-                        myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 10 秒"
-                        sleep 10
                     else
                         if [[ "${str524}" ]]; then
                             myEcho "未获取到号码【${1}】归属地，查号吧 524 错误"
-                            myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 10 秒"
-                            sleep 10
                         else
                             if [[ "${str525}" ]]; then
                                 myEcho "未获取到号码【${1}】归属地，查号吧 525 错误"
-                                myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 10 秒"
-                                sleep 10
                             else
                                 test_1=$(echo ${test_0} | sed -r 's/.*归属省份地区：(.*)<\/li> <li> 电信运营商：.*/\1/g')
                                 if [[ "${test_1}" ]]; then
@@ -103,6 +91,8 @@ getGsd () {
     else
         myEcho "未获取到号码【${1}】源码"
     fi
+    myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 10 秒"
+    sleep 10
     myEcho "获取到号码【${1}】的归属地为【${gsd}】"
     if [[ "${gsd}" != "-" ]]; then
         doGsd "${1}" "${gsd}"
