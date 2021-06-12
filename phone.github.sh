@@ -19,16 +19,16 @@ gsd="-"
 #phone=1455267
 
 curlPhone () {
-    curl -s -o "${htmlDir}/${phone}.get.html" -k -G -d "op=getOne" -d "tel=${phone}" "https://a.cdskdxyy.com/TM/API.PHP"
+    curl -s -o "${phoneG}" -k -G -d "op=getOne" -d "tel=${phone}" "https://a.cdskdxyy.com/TM/API.PHP"
     myEcho "GSD 等待 20 秒"
     sleep 20
 }
 
 curlCHB () {
-    if [[ ! -f "${htmlDir}/${phone}.html" ]]; then
+    if [[ ! -f "${phoneP}" ]]; then
         curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36" \
             -H "Referer: https://cn.m.chahaoba.com/%E9%A6%96%E9%A1%B5" \
-            -s -o "${htmlDir}/${phone}.html" -k \
+            -s -o "${phoneP}" -k \
             "https://cn.m.chahaoba.com/${phone}"
         myEcho "CHB https://cn.m.chahaoba.com/${phone} 等待 20 秒"
         sleep 20
@@ -37,7 +37,7 @@ curlCHB () {
 
 getGsd () {
     curlCHB
-    test_0=$(cat "${htmlDir}/${phone}.html")
+    test_0=$(cat "${phoneP}")
     if [[ "${test_0}" ]]; then
         strFound=$(echo ${test_0} | grep "本站中目前没有找到${phone}页面。")
         str400=$(echo ${test_0} | grep "400 Bad Request")
@@ -124,10 +124,10 @@ add0 () {
 }
 
 doGsd () {
-    curl -s -o "${htmlDir}/${phone}.do.html" -k -G -d "op=insert" -d "val=%7B%22tel%22:%22${phone}%22,%22gsd%22:%22${1}%22%7D" "https://a.cdskdxyy.com/TM/API.PHP"
+    curl -s -o "${phoneD}" -k -G -d "op=insert" -d "val=%7B%22tel%22:%22${phone}%22,%22gsd%22:%22${1}%22%7D" "https://a.cdskdxyy.com/TM/API.PHP"
     myEcho "GSD do 等待 20 秒"
     sleep 20
-    strDone=$(cat "${htmlDir}/${phone}.do.html")
+    strDone=$(cat "${phoneD}")
     myEcho "${strDone}"
     if [[ -n "${strDone}" ]]; then
         setNext
@@ -135,7 +135,7 @@ doGsd () {
 }
 
 setNext () {
-    rm -f "${htmlDir}/${phone}.get.html"
+    rm -f "${phoneG}"
     echo ${mob_next} >${mob_file}
 }
 
@@ -168,15 +168,18 @@ mob_right=$(cat "${mob_file}")
 echo -e >>${logFile}
 echo
 phone=${mob_left}${mob_center}$(add0 "${mob_right}")
+phoneG="${htmlDir}/${phone}.get.html"
+phoneD="${htmlDir}/${phone}.do.html"
+phoneP="${htmlDir}/${phone}.html"
 myEcho "开始操作号码 【${phone}】"
 curlPhone
-json=$(cat "${htmlDir}/${phone}.get.html")
+json=$(cat "${phoneG}")
 myEcho "查询号码 【${phone}】，返回信息 ${json}"
 if [[ -z "${json}" ]]; then
     myEcho "查询失败，10 秒后重新查询"
     sleep 10
     curlPhone
-    json=$(cat "${htmlDir}/${phone}.get.html")
+    json=$(cat "${phoneG}")
     myEcho "查询号码 【${phone}】，返回信息 ${json}"
     if [[ -z "${json}" ]]; then
         myEcho "查询失败，结束本次操作，期待下次成功~"
