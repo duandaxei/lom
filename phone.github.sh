@@ -199,6 +199,6 @@ if [[ -z "${jsonG}" ]]; then
 else
     goonGsd
 fi
-echo -e >>${logFile}
-echo 
 rm -f "${phoneG}" "${phoneD}"
+echo -e >>${logFile}
+echo
