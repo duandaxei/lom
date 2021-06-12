@@ -18,6 +18,12 @@ gsd="-"
 #phone=1311234
 #phone=1455267
 
+curlPhone () {
+    curl -s -o "${htmlDir}/${1}.get.html" -k -G -d "op=getOne" -d "tel=${1}" "https://a.cdskdxyy.com/TM/API.PHP"
+    myEcho "GSD 等待 20 秒"
+    sleep 20
+}
+
 curlCHB () {
     if [[ ! -f "${htmlDir}/${1}.html" ]]; then
         curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36" \
@@ -139,6 +145,20 @@ myEcho () {
     echo "${st}" >>${logFile}
 }
 
+goonGsd () {
+    status=$(echo ${json} | jq ".status")
+    msg=$(echo ${json} | jq ".msg")
+    if [[ ${status} = '"bad"' ]]; then
+        myEcho "bad"
+        getGsd "${1}"
+    elif [[ ${status} = '"ok"' ]] && [[ ${msg} = '"-"' ]]; then
+        myEcho "ok && -"
+        getGsd "${1}"
+    else
+        setNext "${1}"
+    fi
+}
+
 mob_file="./phone.txt"
 [[ ! -f ${mob_file} ]] && (echo 0 >${mob_file})
 mob_left=15
@@ -149,23 +169,22 @@ echo -e >>${logFile}
 echo
 phone=${mob_left}${mob_center}$(add0 "${mob_right}")
 myEcho "开始操作号码 【${phone}】"
-if [[ ! -f "${htmlDir}/${phone}.get.html" ]]; then
-    curl -s -o "${htmlDir}/${phone}.get.html" -k -G -d "op=getOne" -d "tel=${phone}" "https://a.cdskdxyy.com/TM/API.PHP"
-    myEcho "GSD 等待 20 秒"
-    sleep 20
-fi
+curlPhone "${phone}"
 json=$(cat "${htmlDir}/${phone}.get.html")
-status=$(echo ${json} | jq ".status")
-msg=$(echo ${json} | jq ".msg")
 myEcho "查询号码 【${phone}】，返回信息 ${json}"
-if [[ ${status} = '"bad"' ]]; then
-    myEcho "bad"
-    getGsd "${phone}"
-elif [[ ${status} = '"ok"' ]] && [[ ${msg} = '"-"' ]]; then
-    myEcho "ok && -"
-    getGsd "${phone}"
+if [[ -z "${json}" ]]; then
+    myEcho "查询失败，10 秒后重新查询"
+    sleep 10
+    curlPhone "${phone}"
+    json=$(cat "${htmlDir}/${phone}.get.html")
+    myEcho "查询号码 【${phone}】，返回信息 ${json}"
+    if [[ -z "${json}" ]]; then
+        myEcho "查询失败，结束本次操作，期待下次成功~"
+    else
+        goonGsd "${phone}"
+    fi
 else
-    setNext "${phone}"
+    goonGsd "${phone}"
 fi
 echo -e >>${logFile}
 echo 
