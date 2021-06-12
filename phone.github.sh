@@ -46,6 +46,7 @@ getGsd () {
     if [[ "${test_0}" ]]; then
         strFound=$(echo ${test_0} | grep "本站中目前没有找到${phone}页面。")
         str400=$(echo ${test_0} | grep "400 Bad Request")
+        str4002=$(echo ${test_0} | grep "HTTP Error 400")
         str502=$(echo ${test_0} | grep "502 Bad Gateway")
         str522=$(echo ${test_0} | grep "522 Origin Connection Time-out")
         str524=$(echo ${test_0} | grep "524 Origin Time-out")
@@ -56,41 +57,45 @@ getGsd () {
             if [[ "${str400}" ]]; then
                 myEcho "未获取到号码【${phone}】归属地，查号吧 400 错误"
             else
-                if [[ "${str502}" ]]; then
-                    myEcho "未获取到号码【${phone}】归属地，查号吧 502 错误"
+                if [[ "${str4002}" ]]; then
+                    myEcho "未获取到号码【${phone}】归属地，查号吧 400 百度云加速 错误"
                 else
-                    if [[ "${str522}" ]]; then
-                        myEcho "未获取到号码【${phone}】归属地，查号吧 522 错误"
+                    if [[ "${str502}" ]]; then
+                        myEcho "未获取到号码【${phone}】归属地，查号吧 502 错误"
                     else
-                        if [[ "${str524}" ]]; then
-                            myEcho "未获取到号码【${phone}】归属地，查号吧 524 错误"
+                        if [[ "${str522}" ]]; then
+                            myEcho "未获取到号码【${phone}】归属地，查号吧 522 错误"
                         else
-                            if [[ "${str525}" ]]; then
-                                myEcho "未获取到号码【${phone}】归属地，查号吧 525 错误"
+                            if [[ "${str524}" ]]; then
+                                myEcho "未获取到号码【${phone}】归属地，查号吧 524 错误"
                             else
-                                test_1=$(echo ${test_0} | sed -r 's/.*归属省份地区：(.*)<\/li> <li> 电信运营商：.*/\1/g')
-                                if [[ "${test_1}" ]]; then
-                                    strF2=$(echo ${test_1} | grep "、")
-                                    if [[ "${strF2}" == "" ]]; then
-                                        test_2=$(echo ${test_1} | sed -r 's/<a href=".*" class="extiw" title="link:.*">(.*)<\/a>/\1/g')
-                                        gsd="${test_2}-${test_2}"
-                                    else
-                                        #arr=(`echo ${test_1} | tr ' ' '#' | tr '、' ' '`)
-                                        res=()
-                                        oldIFS=$IFS
-                                        IFS=、
-                                        arr=(${test_1})
-                                        for ((i=0; i<${#arr[@]}; i++)); do
-                                            res[i]=$(echo ${arr[$i]} | sed -r 's/<a href=".*" class="extiw" title="link:.*">(.*)<\/a>/\1/g')
-                                        done
-                                        IFS=$oldIFS
-                                        gsd="${res[0]}-${res[1]}"
-                                        if [[ "${res[1]}" != "重庆" ]]; then
-                                            if [[ "${gsd}" != "青海-海南" ]] && [[ "${gsd}" != "吉林-吉林" ]] && [[ $(provinceInBack "${res[1]}") == "1" ]]; then
+                                if [[ "${str525}" ]]; then
+                                    myEcho "未获取到号码【${phone}】归属地，查号吧 525 错误"
+                                else
+                                    test_1=$(echo ${test_0} | sed -r 's/.*归属省份地区：(.*)<\/li> <li> 电信运营商：.*/\1/g')
+                                    if [[ "${test_1}" ]]; then
+                                        strF2=$(echo ${test_1} | grep "、")
+                                        if [[ "${strF2}" == "" ]]; then
+                                            test_2=$(echo ${test_1} | sed -r 's/<a href=".*" class="extiw" title="link:.*">(.*)<\/a>/\1/g')
+                                            gsd="${test_2}-${test_2}"
+                                        else
+                                            #arr=(`echo ${test_1} | tr ' ' '#' | tr '、' ' '`)
+                                            res=()
+                                            oldIFS=$IFS
+                                            IFS=、
+                                            arr=(${test_1})
+                                            for ((i=0; i<${#arr[@]}; i++)); do
+                                                res[i]=$(echo ${arr[$i]} | sed -r 's/<a href=".*" class="extiw" title="link:.*">(.*)<\/a>/\1/g')
+                                            done
+                                            IFS=$oldIFS
+                                            gsd="${res[0]}-${res[1]}"
+                                            if [[ "${res[1]}" != "重庆" ]]; then
+                                                if [[ "${gsd}" != "青海-海南" ]] && [[ "${gsd}" != "吉林-吉林" ]] && [[ $(provinceInBack "${res[1]}") == "1" ]]; then
+                                                    gsd="${res[1]}-${res[0]}"
+                                                fi
+                                            else
                                                 gsd="${res[1]}-${res[0]}"
                                             fi
-                                        else
-                                            gsd="${res[1]}-${res[0]}"
                                         fi
                                     fi
                                 fi
