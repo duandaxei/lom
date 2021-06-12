@@ -146,8 +146,8 @@ myEcho () {
 }
 
 goonGsd () {
-    status=$(echo ${json} | jq ".status")
-    msg=$(echo ${json} | jq ".msg")
+    status=$(echo ${jsonG} | jq ".status")
+    msg=$(echo ${jsonG} | jq ".msg")
     if [[ ${status} = '"bad"' ]]; then
         myEcho "bad"
         getGsd
@@ -173,15 +173,15 @@ phoneD="${htmlDir}/${phone}.do.html"
 phoneP="${htmlDir}/${phone}.html"
 myEcho "开始操作号码 【${phone}】"
 curlPhone
-json=$(cat "${phoneG}")
-myEcho "查询号码 【${phone}】，返回信息 ${json}"
-if [[ -z "${json}" ]]; then
+jsonG=$(cat "${phoneG}")
+myEcho "查询号码 【${phone}】，返回信息 ${jsonG}"
+if [[ -z "${jsonG}" ]]; then
     myEcho "查询失败，10 秒后重新查询"
     sleep 10
     curlPhone
-    json=$(cat "${phoneG}")
-    myEcho "查询号码 【${phone}】，返回信息 ${json}"
-    if [[ -z "${json}" ]]; then
+    jsonG=$(cat "${phoneG}")
+    myEcho "查询号码 【${phone}】，返回信息 ${jsonG}"
+    if [[ -z "${jsonG}" ]]; then
         myEcho "查询失败，结束本次操作，期待下次成功~"
     else
         goonGsd
