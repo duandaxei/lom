@@ -8,6 +8,7 @@ logFile="${logsDir}/phone.$(date -d today +'%Y-%m-%d').log"
 [[ ! -d "${htmlDir}" ]] && (mkdir "${htmlDir}")
 if ! type jq &>/dev/null; then
     sudo apt-get install jq
+    sudo snap install jq
     #yum install jq
 fi
 
