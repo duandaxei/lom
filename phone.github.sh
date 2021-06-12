@@ -135,7 +135,7 @@ doGsd () {
 }
 
 setNext () {
-    rm -f "${phoneG}"
+    rm -f "${phoneG}" "${phoneD}"
     echo ${mob_next} >${mob_file}
 }
 
