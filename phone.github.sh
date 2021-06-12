@@ -13,6 +13,7 @@ if ! type jq &>/dev/null; then
 fi
 
 gsd="-"
+gsdOld=""
 #phone=1540000
 #phone=1560003
 #phone=1311234
@@ -156,6 +157,8 @@ myEcho () {
 goonGsd () {
     status=$(echo ${jsonG} | jq ".status")
     msg=$(echo ${jsonG} | jq ".msg")
+    gsdOld=${msg}
+    myEcho "查询号码 【${phone}】，归属地为【${gsdOld}】"
     if [[ ${status} = '"bad"' ]]; then
         myEcho "bad"
         getGsd
