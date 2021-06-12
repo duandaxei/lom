@@ -37,31 +37,31 @@ curlCHB () {
 
 getGsd () {
     curlCHB
-    test_0=$(cat "${htmlDir}/${1}.html")
+    test_0=$(cat "${htmlDir}/${phone}.html")
     if [[ "${test_0}" ]]; then
-        strFound=$(echo ${test_0} | grep "本站中目前没有找到${1}页面。")
+        strFound=$(echo ${test_0} | grep "本站中目前没有找到${phone}页面。")
         str400=$(echo ${test_0} | grep "400 Bad Request")
         str502=$(echo ${test_0} | grep "502 Bad Gateway")
         str522=$(echo ${test_0} | grep "522 Origin Connection Time-out")
         str524=$(echo ${test_0} | grep "524 Origin Time-out")
         str525=$(echo ${test_0} | grep "525 Origin SSL Handshake Error")
         if [[ "${strFound}" ]]; then
-            myEcho "未获取到号码【${1}】归属地，可能号码格式错误"
+            myEcho "未获取到号码【${phone}】归属地，可能号码格式错误"
         else
             if [[ "${str400}" ]]; then
-                myEcho "未获取到号码【${1}】归属地，查号吧 400 错误"
+                myEcho "未获取到号码【${phone}】归属地，查号吧 400 错误"
             else
                 if [[ "${str502}" ]]; then
-                    myEcho "未获取到号码【${1}】归属地，查号吧 502 错误"
+                    myEcho "未获取到号码【${phone}】归属地，查号吧 502 错误"
                 else
                     if [[ "${str522}" ]]; then
-                        myEcho "未获取到号码【${1}】归属地，查号吧 522 错误"
+                        myEcho "未获取到号码【${phone}】归属地，查号吧 522 错误"
                     else
                         if [[ "${str524}" ]]; then
-                            myEcho "未获取到号码【${1}】归属地，查号吧 524 错误"
+                            myEcho "未获取到号码【${phone}】归属地，查号吧 524 错误"
                         else
                             if [[ "${str525}" ]]; then
-                                myEcho "未获取到号码【${1}】归属地，查号吧 525 错误"
+                                myEcho "未获取到号码【${phone}】归属地，查号吧 525 错误"
                             else
                                 test_1=$(echo ${test_0} | sed -r 's/.*归属省份地区：(.*)<\/li> <li> 电信运营商：.*/\1/g')
                                 if [[ "${test_1}" ]]; then
@@ -96,13 +96,13 @@ getGsd () {
             fi
         fi
     else
-        myEcho "未获取到号码【${1}】源码"
+        myEcho "未获取到号码【${phone}】源码"
     fi
-    myEcho "CHB https://cn.m.chahaoba.com/${1} 等待 10 秒"
+    myEcho "CHB https://cn.m.chahaoba.com/${phone} 等待 10 秒"
     sleep 10
-    myEcho "获取到号码【${1}】的归属地为【${gsd}】"
+    myEcho "获取到号码【${phone}】的归属地为【${gsd}】"
     if [[ "${gsd}" != "-" ]]; then
-        doGsd "${1}" "${gsd}"
+        doGsd "${phone}" "${gsd}"
     fi
 }
 
@@ -150,10 +150,10 @@ goonGsd () {
     msg=$(echo ${json} | jq ".msg")
     if [[ ${status} = '"bad"' ]]; then
         myEcho "bad"
-        getGsd "${1}"
+        getGsd
     elif [[ ${status} = '"ok"' ]] && [[ ${msg} = '"-"' ]]; then
         myEcho "ok && -"
-        getGsd "${1}"
+        getGsd
     else
         setNext "${1}"
     fi
