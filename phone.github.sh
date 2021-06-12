@@ -130,12 +130,12 @@ doGsd () {
     strDone=$(cat "${htmlDir}/${phone}.do.html")
     myEcho "${strDone}"
     if [[ -n "${strDone}" ]]; then
-        setNext "${phone}"
+        setNext
     fi
 }
 
 setNext () {
-    rm -f "${htmlDir}/${1}.get.html"
+    rm -f "${htmlDir}/${phone}.get.html"
     echo ${mob_next} >${mob_file}
 }
 
@@ -155,7 +155,7 @@ goonGsd () {
         myEcho "ok && -"
         getGsd
     else
-        setNext "${1}"
+        setNext
     fi
 }
 
@@ -181,10 +181,10 @@ if [[ -z "${json}" ]]; then
     if [[ -z "${json}" ]]; then
         myEcho "查询失败，结束本次操作，期待下次成功~"
     else
-        goonGsd "${phone}"
+        goonGsd
     fi
 else
-    goonGsd "${phone}"
+    goonGsd
 fi
 echo -e >>${logFile}
 echo 
