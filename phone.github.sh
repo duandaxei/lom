@@ -102,7 +102,7 @@ getGsd () {
     sleep 10
     myEcho "获取到号码【${phone}】的归属地为【${gsd}】"
     if [[ "${gsd}" != "-" ]]; then
-        doGsd "${phone}" "${gsd}"
+        doGsd "${gsd}"
     fi
 }
 
@@ -124,13 +124,13 @@ add0 () {
 }
 
 doGsd () {
-    curl -s -o "${htmlDir}/${1}.do.html" -k -G -d "op=insert" -d "val=%7B%22tel%22:%22${1}%22,%22gsd%22:%22${2}%22%7D" "https://a.cdskdxyy.com/TM/API.PHP"
+    curl -s -o "${htmlDir}/${phone}.do.html" -k -G -d "op=insert" -d "val=%7B%22tel%22:%22${phone}%22,%22gsd%22:%22${1}%22%7D" "https://a.cdskdxyy.com/TM/API.PHP"
     myEcho "GSD do 等待 20 秒"
     sleep 20
-    strDone=$(cat "${htmlDir}/${1}.do.html")
+    strDone=$(cat "${htmlDir}/${phone}.do.html")
     myEcho "${strDone}"
     if [[ -n "${strDone}" ]]; then
-        setNext "${1}"
+        setNext "${phone}"
     fi
 }
 
