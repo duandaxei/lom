@@ -19,7 +19,7 @@ gsd="-"
 #phone=1455267
 
 curlPhone () {
-    curl -s -o "${htmlDir}/${1}.get.html" -k -G -d "op=getOne" -d "tel=${1}" "https://a.cdskdxyy.com/TM/API.PHP"
+    curl -s -o "${htmlDir}/${phone}.get.html" -k -G -d "op=getOne" -d "tel=${phone}" "https://a.cdskdxyy.com/TM/API.PHP"
     myEcho "GSD 等待 20 秒"
     sleep 20
 }
@@ -169,13 +169,13 @@ echo -e >>${logFile}
 echo
 phone=${mob_left}${mob_center}$(add0 "${mob_right}")
 myEcho "开始操作号码 【${phone}】"
-curlPhone "${phone}"
+curlPhone
 json=$(cat "${htmlDir}/${phone}.get.html")
 myEcho "查询号码 【${phone}】，返回信息 ${json}"
 if [[ -z "${json}" ]]; then
     myEcho "查询失败，10 秒后重新查询"
     sleep 10
-    curlPhone "${phone}"
+    curlPhone
     json=$(cat "${htmlDir}/${phone}.get.html")
     myEcho "查询号码 【${phone}】，返回信息 ${json}"
     if [[ -z "${json}" ]]; then
