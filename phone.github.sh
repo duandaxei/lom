@@ -62,6 +62,7 @@ getGsd () {
     curlCHB
     test_0=$(cat "${phoneP}")
     if [[ "${test_0}" ]]; then
+        numSize=$(ls -l "${phoneP}" | awk '{ print $5 }')
         strFound=$(echo ${test_0} | grep "本站中目前没有找到${phone}页面。")
         strCached=$(echo ${test_0} | grep "This is a cached copy of the requested page")
         str400=$(echo ${test_0} | grep "400 Bad Request")
@@ -74,7 +75,7 @@ getGsd () {
         if [[ "${strFound}" ]]; then
             myEcho "未获取到号码【${phone}】归属地，可能号码格式错误"
         else
-            if [[ "${strCached}" ]]; then
+            if [[ "${strCached}" ]] && [[ ${numSize} -lt 4096 ]]; then
                 myEcho "未获取到号码【${phone}】归属地，页面缓存未更新"
             else
                 if [[ "${str400}" ]]; then
