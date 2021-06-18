@@ -138,9 +138,10 @@ getGsd () {
         myEcho "未获取到号码【${phone}】源码"
     fi
     myEcho "获取到号码【${phone}】的归属地为【${gsd}】"
-    if [[ "${gsd}" != "-" ]]; then
-        doGsd "${gsd}"
-    fi
+    #if [[ "${gsd}" != "-" ]]; then
+        #doGsd "${gsd}"
+    #fi
+    doGsd "${gsd}"
 }
 
 provinceInBack () {
