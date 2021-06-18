@@ -41,17 +41,19 @@ curlCHB () {
             -H "Referer: https://cn.m.chahaoba.com/%E9%A6%96%E9%A1%B5" \
             -s -o "${phoneP}" -k \
             "https://cn.m.chahaoba.com/${phone}?${cur_sec}"
-        sleep 3
         myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 等待 3 秒"
+        sleep 3
         if [[ ! -f "${phoneP}" ]]; then
             if [[ "${i}" == "3" ]]; then
                 echo >${phoneP}
-                myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 跳过号码 【${phone}】"
+                myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 跳过号码【${phone}】"
             else
                 chbNext=$(date --date="${chbRand} second" '+%Y-%m-%d %H:%M:%S')
                 myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 未获取到 等待 ${chbRand} 秒 下次操作: ${chbNext}"
                 sleep ${chbRand}
             fi
+        else
+            myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 获取到号码【${phone}】归属地"
         fi
     done
 }
