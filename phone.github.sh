@@ -46,7 +46,8 @@ curlCHB () {
             echo >${phoneP}
             myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 跳过 【${phone}】"
         else
-            myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 等待 ${chbRand} 秒"
+            chbNext=$(date --date="${chbRand} second" '+%Y-%m-%d %H:%M:%S')
+            myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 等待 ${chbRand} 秒 下次操作: ${chbNext}"
             sleep ${chbRand}
         fi
     done
