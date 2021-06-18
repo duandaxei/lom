@@ -30,15 +30,20 @@ curlPhone () {
 }
 
 curlCHB () {
-    if [[ ! -f "${phoneP}" ]]; then
+    i=0
+    while [[ ! -f "${phoneP}" ]]; do
+        ((i+=1))
+        ((chbMin=10*60))
+        ((chbMax=15*60))
+        chbRand=$[$RANDOM%$((${chbMax}-${chbMin}+1))+${chbMin}]
         cur_sec=`date '+%s'`
         curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36" \
             -H "Referer: https://cn.m.chahaoba.com/%E9%A6%96%E9%A1%B5" \
             -s -o "${phoneP}" -k \
             "https://cn.m.chahaoba.com/${phone}?${cur_sec}"
-        myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 等待 20 秒"
-        sleep 20
-    fi
+        myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 等待 ${chbRand} 秒"
+        sleep ${chbRand}
+    done
 }
 
 getGsd () {
