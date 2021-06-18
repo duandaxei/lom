@@ -137,8 +137,6 @@ getGsd () {
     else
         myEcho "未获取到号码【${phone}】源码"
     fi
-    myEcho "CHB https://cn.m.chahaoba.com/${phone} 等待 10 秒"
-    sleep 10
     myEcho "获取到号码【${phone}】的归属地为【${gsd}】"
     if [[ "${gsd}" != "-" ]]; then
         doGsd "${gsd}"
