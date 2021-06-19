@@ -216,7 +216,7 @@ curlPhone () {
     done
 }
 
-numLimit=5
+numLimit=10
 phoneI="./phone.i.txt"
 [[ ! -f ${phoneI} ]] && (echo 0 >${phoneI})
 numI=$(cat "${phoneI}")
@@ -270,5 +270,8 @@ if [[ ${goonNext} -ne 1 ]]; then
         echo
         sleep ${numRand}
     fi
+else
+    echo -e >>${logFile}
+    echo
 fi
 exec ./phone.github.sh
