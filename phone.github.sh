@@ -14,6 +14,7 @@ fi
 
 gsd="-"
 gsdOld=""
+goonNext=0
 #phone=1540000
 #phone=1560003
 #phone=1311234
@@ -206,6 +207,7 @@ goonGsd () {
         getGsd
     else
         setNext
+        goonNext=1
     fi
 }
 
@@ -242,3 +244,6 @@ fi
 rm -f "${phoneG}"
 echo -e >>${logFile}
 echo
+if [[ ${goonNext} = 1 ]]; then
+    exec ./phone.github.sh
+fi
