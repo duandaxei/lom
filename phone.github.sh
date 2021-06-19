@@ -260,8 +260,8 @@ else
 fi
 rm -f "${phoneG}"
 if [[ ${goonNext} -ne 1 ]]; then
-    if [[ ${numI_next} -le ${numLimit} ]]; then
-        echo ${numI_next} >${phoneI}
+    echo ${numI_next} >${phoneI}
+    if [[ ${numI_next} -lt ${numLimit} ]]; then
         ((numMin=2*60))
         ((numMax=3*60))
         numRand=$[$RANDOM%$((${numMax}-${numMin}+1))+${numMin}]
@@ -270,6 +270,9 @@ if [[ ${goonNext} -ne 1 ]]; then
         echo -e >>${logFile}
         echo
         sleep ${numRand}
+    else
+        echo -e >>${logFile}
+        echo
     fi
 else
     echo -e >>${logFile}
