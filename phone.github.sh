@@ -121,7 +121,7 @@ getGsd () {
                         myEcho "未获取到号码【${phone}】归属地，查号吧 400 百度云加速 错误"
                     else
                         if [[ "${str403}" ]]; then
-                            myEcho "未获取到号码【${phone}】归属地，查号吧 502 错误"
+                            myEcho "未获取到号码【${phone}】归属地，查号吧 403 错误"
                         else
                             if [[ "${str502}" ]]; then
                                 myEcho "未获取到号码【${phone}】归属地，查号吧 502 错误"
