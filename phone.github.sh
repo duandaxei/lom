@@ -219,7 +219,7 @@ curlPhone () {
 phoneI="./phone.i.txt"
 [[ ! -f ${phoneI} ]] && (echo 0 >${phoneI})
 numI=$(cat "${phoneI}")
-if [[ ${numI} -eq 10 ]]; then
+if [[ ${numI} -eq 5 ]]; then
     rm -f "${phoneI}"
     exit 0
 fi
