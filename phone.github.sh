@@ -52,8 +52,8 @@ doGsd () {
     while [[ ! -f "${phoneD}" ]]; do
         ((i+=1))
         curl -s -o "${phoneD}" -k -G -d "op=insert" -d "val=%7B%22tel%22:%22${phone}%22,%22gsd%22:%22${1}%22%7D" "https://a.cdskdxyy.com/TM/API.PHP"
-        myEcho "GSD insert 第 ${i} 次 等待 5 秒"
-        sleep 5
+        myEcho "GSD insert 第 ${i} 次 等待 3 秒"
+        sleep 3
     done
     strDone=$(cat "${phoneD}")
     rm -f "${phoneD}"
@@ -211,8 +211,8 @@ curlPhone () {
     while [[ ! -f "${phoneG}" ]]; do
         ((i+=1))
         curl -s -o "${phoneG}" -k -G -d "op=getOne" -d "tel=${phone}" "https://a.cdskdxyy.com/TM/API.PHP"
-        myEcho "GSD getOne 第 ${i} 次 等待 5 秒"
-        sleep 5
+        myEcho "GSD getOne 第 ${i} 次 等待 3 秒"
+        sleep 3
     done
 }
 
@@ -243,8 +243,8 @@ curlPhone
 jsonG=$(cat "${phoneG}")
 myEcho "查询号码 【${phone}】，返回信息 ${jsonG}"
 if [[ -z "${jsonG}" ]]; then
-    myEcho "查询失败，5 秒后重新查询"
-    sleep 5
+    myEcho "查询失败，3 秒后重新查询"
+    sleep 3
     curlPhone
     jsonG=$(cat "${phoneG}")
     myEcho "查询号码 【${phone}】，返回信息 ${jsonG}"
