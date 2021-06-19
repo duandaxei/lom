@@ -216,10 +216,11 @@ curlPhone () {
     done
 }
 
+numLimit=5
 phoneI="./phone.i.txt"
 [[ ! -f ${phoneI} ]] && (echo 0 >${phoneI})
 numI=$(cat "${phoneI}")
-if [[ ${numI} -eq 5 ]]; then
+if [[ ${numI} -eq ${numLimit} ]]; then
     rm -f "${phoneI}"
     exit 0
 fi
@@ -258,14 +259,16 @@ else
 fi
 rm -f "${phoneG}"
 if [[ ${goonNext} -ne 1 ]]; then
-    echo ${numI_next} >${phoneI}
-    ((numMin=2*60))
-    ((numMax=3*60))
-    numRand=$[$RANDOM%$((${numMax}-${numMin}+1))+${numMin}]
-    timeNext=$(date --date="${numRand} second" '+%Y-%m-%d %H:%M:%S')
-    myEcho "下次操作: ${timeNext}"
-    echo -e >>${logFile}
-    echo
-    sleep ${numRand}
+    if [[ ${numI} -lt ${numLimit} ]]; then
+        echo ${numI_next} >${phoneI}
+        ((numMin=2*60))
+        ((numMax=3*60))
+        numRand=$[$RANDOM%$((${numMax}-${numMin}+1))+${numMin}]
+        timeNext=$(date --date="${numRand} second" '+%Y-%m-%d %H:%M:%S')
+        myEcho "下次操作: ${timeNext}"
+        echo -e >>${logFile}
+        echo
+        sleep ${numRand}
+    fi
 fi
 exec ./phone.github.sh
