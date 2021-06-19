@@ -221,7 +221,7 @@ numLimit=10
 phoneI="./phone.i.txt"
 [[ ! -f ${phoneI} ]] && (echo 0 >${phoneI})
 numI=$(cat "${phoneI}")
-if [[ ${numI} -eq $((${numLimit}-1)) ]]; then
+if [[ ${numI} -eq ${numLimit} ]]; then
     rm -f "${phoneI}"
     exit 0
 fi
