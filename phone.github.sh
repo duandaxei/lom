@@ -224,7 +224,6 @@ if [[ ${numI} -eq 10 ]]; then
     exit 0
 fi
 ((numI_next=${numI}+1))
-echo ${numI_next} >${phoneI}
 myEcho "开始第 ${numI_next} 次操作"
 
 phoneN="./phone.txt"
@@ -261,6 +260,14 @@ rm -f "${phoneG}"
 if [[ ${goonNext} = 1 ]]; then
     exec ./phone.github.sh
 else
+    echo ${numI_next} >${phoneI}
+    ((numMin=3*60))
+    ((numMax=5*60))
+    numRand=$[$RANDOM%$((${numMax}-${numMin}+1))+${numMin}]
+    timeNext=$(date --date="${numRand} second" '+%Y-%m-%d %H:%M:%S')
+    myEcho "下次操作: ${timeNext}"
     echo -e >>${logFile}
     echo
+    sleep ${numRand}
+    exec ./phone.github.sh
 fi
