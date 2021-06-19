@@ -259,7 +259,7 @@ else
 fi
 rm -f "${phoneG}"
 if [[ ${goonNext} -ne 1 ]]; then
-    if [[ ${numI} -lt ${numLimit} ]]; then
+    if [[ ${numI_next} -lt ${numLimit} ]]; then
         echo ${numI_next} >${phoneI}
         ((numMin=2*60))
         ((numMax=3*60))
