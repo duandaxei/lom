@@ -20,23 +20,53 @@ goonNext=0
 #phone=1311234
 #phone=1455267
 
-curlPhone () {
+myEcho () {
+    st="$(date '+%Y-%m-%d %H:%M:%S') ${1}"
+    echo "${st}"
+    echo "${st}" >>${logFile}
+}
+
+provinceInBack () {
+    province=(安徽 河北 山西 辽宁 吉林 黑龙江 江苏 浙江 福建 江西 山东 河南 湖北 湖南 广东 海南 四川 贵州 云南 陕西 甘肃 青海 台湾 内蒙古 广西 西藏 宁夏 新疆)
+    if [[ "${province[@]}" =~ "${1}" ]]; then
+        echo "1"
+    else
+        echo "0"
+    fi
+}
+
+add0 () {
+    num=${1}
+    for ((i=0; i<(4-${#1}); i++)); do
+        num="0${num}"
+    done
+    echo "${num}"
+}
+
+setNext () {
+    echo ${mob_next} >${mob_file}
+}
+
+doGsd () {
     i=0
-    while [[ ! -f "${phoneG}" ]]; do
+    while [[ ! -f "${phoneD}" ]]; do
         ((i+=1))
-        curl -s -o "${phoneG}" -k -G -d "op=getOne" -d "tel=${phone}" "https://a.cdskdxyy.com/TM/API.PHP"
-        myEcho "GSD getOne 第 ${i} 次 等待 15 秒"
+        curl -s -o "${phoneD}" -k -G -d "op=insert" -d "val=%7B%22tel%22:%22${phone}%22,%22gsd%22:%22${1}%22%7D" "https://a.cdskdxyy.com/TM/API.PHP"
+        myEcho "GSD insert 第 ${i} 次 等待 15 秒"
         sleep 15
     done
+    strDone=$(cat "${phoneD}")
+    rm -f "${phoneD}"
+    myEcho "${strDone}"
+    if [[ -n "${strDone}" ]]; then
+        setNext
+    fi
 }
 
 curlCHB () {
     i=0
     while [[ ! -f "${phoneP}" ]]; do
         ((i+=1))
-        ((chbMin=5*60))
-        ((chbMax=8*60))
-        chbRand=$[$RANDOM%$((${chbMax}-${chbMin}+1))+${chbMin}]
         cur_sec=`date '+%s'`
         curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36" \
             -H "Referer: https://cn.m.chahaoba.com/%E9%A6%96%E9%A1%B5" \
@@ -45,10 +75,13 @@ curlCHB () {
         myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 等待 3 秒"
         sleep 3
         if [[ ! -f "${phoneP}" ]]; then
-            if [[ "${i}" == "3" ]]; then
+            if [[ ${i} = 3 ]]; then
                 echo >${phoneP}
                 myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 跳过号码【${phone}】"
             else
+                ((chbMin=5*60))
+                ((chbMax=8*60))
+                chbRand=$[$RANDOM%$((${chbMax}-${chbMin}+1))+${chbMin}]
                 chbNext=$(date --date="${chbRand} second" '+%Y-%m-%d %H:%M:%S')
                 myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 未获取到 等待 ${chbRand} 秒 下次操作: ${chbNext}"
                 sleep ${chbRand}
@@ -107,7 +140,7 @@ getGsd () {
                                                 test_1=$(echo ${test_0} | sed -r 's/.*归属省份地区：(.*)<\/li> <li> 电信运营商：.*/\1/g')
                                                 if [[ "${test_1}" ]]; then
                                                     strF2=$(echo ${test_1} | grep "、")
-                                                    if [[ "${strF2}" == "" ]]; then
+                                                    if [[ "${strF2}" = "" ]]; then
                                                         test_2=$(echo ${test_1} | sed -r 's/<a href=".*" class="extiw" title="link:.*">(.*)<\/a>/\1/g')
                                                         gsd="${test_2}-${test_2}"
                                                     else
@@ -122,7 +155,7 @@ getGsd () {
                                                         IFS=$oldIFS
                                                         gsd="${res[0]}-${res[1]}"
                                                         if [[ "${res[1]}" != "重庆" ]]; then
-                                                            if [[ "${gsd}" != "青海-海南" ]] && [[ "${gsd}" != "吉林-吉林" ]] && [[ $(provinceInBack "${res[1]}") == "1" ]]; then
+                                                            if [[ "${gsd}" != "青海-海南" ]] && [[ "${gsd}" != "吉林-吉林" ]] && [[ $(provinceInBack "${res[1]}") = "1" ]]; then
                                                                 gsd="${res[1]}-${res[0]}"
                                                             fi
                                                         else
@@ -151,49 +184,6 @@ getGsd () {
     doGsd "${gsd}"
 }
 
-provinceInBack () {
-    province=(安徽 河北 山西 辽宁 吉林 黑龙江 江苏 浙江 福建 江西 山东 河南 湖北 湖南 广东 海南 四川 贵州 云南 陕西 甘肃 青海 台湾 内蒙古 广西 西藏 宁夏 新疆)
-    if [[ "${province[@]}" =~ "${1}" ]]; then
-        echo "1"
-    else
-        echo "0"
-    fi
-}
-
-add0 () {
-    num=${1}
-    for ((i=0; i<(4-${#1}); i++)); do
-        num="0${num}"
-    done
-    echo "${num}"
-}
-
-doGsd () {
-    i=0
-    while [[ ! -f "${phoneD}" ]]; do
-        ((i+=1))
-        curl -s -o "${phoneD}" -k -G -d "op=insert" -d "val=%7B%22tel%22:%22${phone}%22,%22gsd%22:%22${1}%22%7D" "https://a.cdskdxyy.com/TM/API.PHP"
-        myEcho "GSD insert 第 ${i} 次 等待 15 秒"
-        sleep 15
-    done
-    strDone=$(cat "${phoneD}")
-    rm -f "${phoneD}"
-    myEcho "${strDone}"
-    if [[ -n "${strDone}" ]]; then
-        setNext
-    fi
-}
-
-setNext () {
-    echo ${mob_next} >${mob_file}
-}
-
-myEcho () {
-    st="$(date '+%Y-%m-%d %H:%M:%S') ${1}"
-    echo "${st}"
-    echo "${st}" >>${logFile}
-}
-
 goonGsd () {
     status=$(echo ${jsonG} | jq ".status")
     msg=$(echo ${jsonG} | jq ".msg")
@@ -211,15 +201,25 @@ goonGsd () {
     fi
 }
 
+curlPhone () {
+    i=0
+    while [[ ! -f "${phoneG}" ]]; do
+        ((i+=1))
+        curl -s -o "${phoneG}" -k -G -d "op=getOne" -d "tel=${phone}" "https://a.cdskdxyy.com/TM/API.PHP"
+        myEcho "GSD getOne 第 ${i} 次 等待 15 秒"
+        sleep 15
+    done
+}
+
 mob_file="./phone.txt"
 [[ ! -f ${mob_file} ]] && (echo 0 >${mob_file})
-mob_left=15
-mob_center=9
-mob_right=$(cat "${mob_file}")
-((mob_next=${mob_right}+1))
+left=15
+center=9
+start=$(cat "${mob_file}")
+((mob_next=${start}+1))
 echo -e >>${logFile}
 echo
-phone=${mob_left}${mob_center}$(add0 "${mob_right}")
+phone=${left}${center}$(add0 "${start}")
 phoneG="${htmlDir}/${phone}.get.html"
 phoneD="${htmlDir}/${phone}.do.html"
 phoneP="${htmlDir}/${phone}.html"
