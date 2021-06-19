@@ -217,7 +217,7 @@ curlPhone () {
     done
 }
 
-numLimit=10
+numLimit=3
 phoneI="./phone.i.txt"
 [[ ! -f ${phoneI} ]] && (echo 0 >${phoneI})
 numI=$(cat "${phoneI}")
@@ -260,7 +260,7 @@ else
 fi
 rm -f "${phoneG}"
 if [[ ${goonNext} -ne 1 ]]; then
-    if [[ ${numI_next} -lt ${numLimit} ]]; then
+    if [[ ${numI_next} -le ${numLimit} ]]; then
         echo ${numI_next} >${phoneI}
         ((numMin=2*60))
         ((numMax=3*60))
