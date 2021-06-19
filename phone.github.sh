@@ -242,8 +242,9 @@ else
     goonGsd
 fi
 rm -f "${phoneG}"
-echo -e >>${logFile}
-echo
 if [[ ${goonNext} = 1 ]]; then
     exec ./phone.github.sh
+else
+    echo -e >>${logFile}
+    echo
 fi
