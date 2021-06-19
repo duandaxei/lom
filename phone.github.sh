@@ -44,7 +44,7 @@ add0 () {
 }
 
 setNext () {
-    echo ${mob_next} >${mob_file}
+    echo ${mob_next} >${phoneN}
 }
 
 doGsd () {
@@ -216,11 +216,11 @@ curlPhone () {
     done
 }
 
-mob_file="./phone.txt"
-[[ ! -f ${mob_file} ]] && (echo 0 >${mob_file})
+phoneN="./phone.txt"
+[[ ! -f ${phoneN} ]] && (echo 0 >${phoneN})
 left=15
 center=9
-start=$(cat "${mob_file}")
+start=$(cat "${phoneN}")
 ((mob_next=${start}+1))
 echo -e >>${logFile}
 echo
