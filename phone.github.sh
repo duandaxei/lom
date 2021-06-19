@@ -216,6 +216,16 @@ curlPhone () {
     done
 }
 
+phoneI="./phone.i.txt"
+[[ ! -f ${phoneI} ]] && (echo 0 >${phoneI})
+numI=$(cat "${phoneI}")
+if [[ ${numI} -eq 10 ]]; then
+    exit 0
+fi
+((numI_next=${numI}+1))
+echo ${numI_next} >${phoneI}
+myEcho "开始第 ${numI_next} 次操作"
+
 phoneN="./phone.txt"
 [[ ! -f ${phoneN} ]] && (echo 0 >${phoneN})
 left=15
