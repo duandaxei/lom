@@ -257,9 +257,7 @@ else
     goonGsd
 fi
 rm -f "${phoneG}"
-if [[ ${goonNext} = 1 ]]; then
-    exec ./phone.github.sh
-else
+if [[ ${goonNext} -ne 1 ]]; then
     echo ${numI_next} >${phoneI}
     ((numMin=3*60))
     ((numMax=5*60))
@@ -269,5 +267,5 @@ else
     echo -e >>${logFile}
     echo
     sleep ${numRand}
-    exec ./phone.github.sh
 fi
+exec ./phone.github.sh
