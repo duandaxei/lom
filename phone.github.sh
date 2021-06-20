@@ -52,8 +52,8 @@ doGsd () {
     while [[ ! -f "${phoneD}" ]]; do
         ((i+=1))
         curl -s -o "${phoneD}" -k -G -d "op=insert" -d "val=%7B%22tel%22:%22${phone}%22,%22gsd%22:%22${1}%22%7D" "https://a.cdskdxyy.com/TM/API.PHP"
-        myEcho "GSD insert 第 ${i} 次 等待 3 秒"
-        sleep 3
+        myEcho "GSD insert 第 ${i} 次 等待 1 秒"
+        sleep 1
     done
     strDone=$(cat "${phoneD}")
     rm -f "${phoneD}"
@@ -72,15 +72,15 @@ curlCHB () {
             -H "Referer: https://cn.m.chahaoba.com/%E9%A6%96%E9%A1%B5" \
             -s -o "${phoneP}" -k \
             "https://cn.m.chahaoba.com/${phone}?${cur_sec}"
-        myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 等待 3 秒"
-        sleep 3
+        myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 等待 1 秒"
+        sleep 1
         if [[ ! -f "${phoneP}" ]]; then
             if [[ ${i} = 3 ]]; then
                 echo >${phoneP}
                 myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 跳过号码【${phone}】"
             else
-                ((chbMin=1*60))
-                ((chbMax=2*60))
+                ((chbMin=0.1*60))
+                ((chbMax=0.5*60))
                 chbRand=$[$RANDOM%$((${chbMax}-${chbMin}+1))+${chbMin}]
                 chbNext=$(date --date="${chbRand} second" '+%Y-%m-%d %H:%M:%S')
                 myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 未获取到 等待 ${chbRand} 秒 下次操作: ${chbNext}"
@@ -212,8 +212,8 @@ curlPhone () {
     while [[ ! -f "${phoneG}" ]]; do
         ((i+=1))
         curl -s -o "${phoneG}" -k -G -d "op=getOne" -d "tel=${phone}" "https://a.cdskdxyy.com/TM/API.PHP"
-        myEcho "GSD getOne 第 ${i} 次 等待 3 秒"
-        sleep 3
+        myEcho "GSD getOne 第 ${i} 次 等待 1 秒"
+        sleep 1
     done
 }
 
@@ -245,8 +245,8 @@ curlPhone
 jsonG=$(cat "${phoneG}")
 myEcho "查询号码 【${phone}】，返回信息 ${jsonG}"
 if [[ -z "${jsonG}" ]]; then
-    myEcho "查询失败，3 秒后重新查询"
-    sleep 3
+    myEcho "查询失败，1 秒后重新查询"
+    sleep 1
     curlPhone
     jsonG=$(cat "${phoneG}")
     myEcho "查询号码 【${phone}】，返回信息 ${jsonG}"
@@ -262,8 +262,8 @@ rm -f "${phoneG}"
 if [[ ${goonNext} -ne 1 ]]; then
     echo ${numI_next} >${phoneI}
     if [[ ${numI_next} -lt ${numLimit} ]]; then
-        ((numMin=1*60))
-        ((numMax=2*60))
+        ((numMin=0.1*60))
+        ((numMax=0.5*60))
         numRand=$[$RANDOM%$((${numMax}-${numMin}+1))+${numMin}]
         timeNext=$(date --date="${numRand} second" '+%Y-%m-%d %H:%M:%S')
         myEcho "下次操作: ${timeNext}"
