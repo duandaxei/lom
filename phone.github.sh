@@ -79,8 +79,8 @@ curlCHB () {
                 echo >${phoneP}
                 myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 跳过号码【${phone}】"
             else
-                ((chbMin=2*60))
-                ((chbMax=3*60))
+                ((chbMin=1*60))
+                ((chbMax=2*60))
                 chbRand=$[$RANDOM%$((${chbMax}-${chbMin}+1))+${chbMin}]
                 chbNext=$(date --date="${chbRand} second" '+%Y-%m-%d %H:%M:%S')
                 myEcho "CHB https://cn.m.chahaoba.com/${phone}?${cur_sec} 第 ${i} 次 未获取到 等待 ${chbRand} 秒 下次操作: ${chbNext}"
@@ -217,7 +217,7 @@ curlPhone () {
     done
 }
 
-numLimit=10
+numLimit=15
 phoneI="./phone.i.txt"
 [[ ! -f ${phoneI} ]] && (echo 0 >${phoneI})
 numI=$(cat "${phoneI}")
@@ -262,8 +262,8 @@ rm -f "${phoneG}"
 if [[ ${goonNext} -ne 1 ]]; then
     echo ${numI_next} >${phoneI}
     if [[ ${numI_next} -lt ${numLimit} ]]; then
-        ((numMin=2*60))
-        ((numMax=3*60))
+        ((numMin=1*60))
+        ((numMax=2*60))
         numRand=$[$RANDOM%$((${numMax}-${numMin}+1))+${numMin}]
         timeNext=$(date --date="${numRand} second" '+%Y-%m-%d %H:%M:%S')
         myEcho "下次操作: ${timeNext}"
