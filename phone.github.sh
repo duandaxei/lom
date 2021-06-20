@@ -217,7 +217,7 @@ curlPhone () {
     done
 }
 
-numLimit=15
+numLimit=20
 phoneI="./phone.i.txt"
 [[ ! -f ${phoneI} ]] && (echo 0 >${phoneI})
 numI=$(cat "${phoneI}")
