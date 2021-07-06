@@ -230,8 +230,8 @@ myEcho "开始第 ${numI_next} 次操作"
 
 phoneN="./phone.txt"
 [[ ! -f ${phoneN} ]] && (echo 9999 >${phoneN})
-left=13
-center=0
+left=17
+center=7
 start=$(cat "${phoneN}")
 if [[ "${start}" == "-1" ]]; then
     myEcho "号码【${left}${center}（9999 ---> 0000）】处理完毕"
